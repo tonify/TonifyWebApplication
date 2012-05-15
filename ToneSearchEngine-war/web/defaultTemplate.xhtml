@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/default2.css" rel="stylesheet" type="text/css" />
+        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <title><h:outputText value="Tonify - The Tone-Conscious Search Engine!"/></title>
+        <script type="text/javascript">
+            var chartStyle = {
+                padding:20,
+                legend: {
+                    display:"bottom",
+                    spacing:10
+                }
+            };
+            var lineOneStyle =
+            {
+                color: 0x006600
+            };
+            var lineTwoStyle =
+            {
+                color: 0x000066
+            };
+            var lineFourStyle =
+            {
+                color: 0x660000
+            };
+            var lineThreeStyle =
+            {
+                color: 0xFF66CC
+            };
+        </script>
+    </h:head>    
+    <h:body>
+        <div align="center">
+        <table border="1" style="border:1px solid black;border-collapse: collapse" width="720">
+            <tr style="border:1px solid black;border-collapse: collapse">
+                <td align="center" style="border:1px solid black;border-collapse: collapse">
+                        <h:graphicImage value="./resources/logo.png"/>
+                </td>
+            </tr>
+            <tr style="border:1px solid black;border-collapse: collapse">
+                <td align="center" id="content" style="border:1px solid black;border-collapse: collapse">
+                        <ui:insert name="content"></ui:insert>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </h:body>
+    
+</html>

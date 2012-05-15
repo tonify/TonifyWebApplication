@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="defaultTemplate.xhtml">
+        <ui:define name="content">
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+            <p:dialog modal="true" widgetVar="statusDialog" header="Loading..."
+                      draggable="false" closable="false">
+                <p:graphicImage value="/resources/ajaxloadingbar.gif" />
+            </p:dialog>
+            <br/>
+            <h:form id="search">
+                <h:messages globalOnly="true"/>
+                <h:panelGrid columns="2">
+                    <p:inputText value="#{searchManagedBean.query}" style="width:400px;height:20px;"/>
+
+                    <p:commandButton update="search" action="#{searchManagedBean.executeQuery}" value="Search"/>
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="10px">
+                    <h:outputLabel value="Sentiment:" style="font-weight:bold;"/>
+                    <p:selectOneMenu value="#{searchManagedBean.selectedTone1}" label="Sentiment">  
+                        <f:selectItems value="#{searchManagedBean.possibleTones1}" />  
+                    </p:selectOneMenu> 
+                    <h:outputLabel value="Mood:" style="font-weight:bold;"/>
+                    <p:selectOneMenu value="#{searchManagedBean.selectedTone2}" label="Mood">  
+                        <f:selectItems value="#{searchManagedBean.possibleTones2}" />  
+                    </p:selectOneMenu>  
+                    <h:outputLabel value="Tonality:" style="font-weight:bold;"/>
+                    <p:selectOneMenu value="#{searchManagedBean.selectedTone3}" label="Tonality">  
+                        <f:selectItems value="#{searchManagedBean.possibleTones3}" />  
+                    </p:selectOneMenu>  
+                </h:panelGrid>
+                <h:panelGrid columns="1">
+                    <p:dataTable emptyMessage="No results." style="width: 700px" scrollable="true" height="200" var="r" value="#{searchManagedBean.results}">
+                        
+                        <p:column style="text-align: left; width:700px" headerText="Results">
+                            <h:outputText value="#{r.rank}. #{r.title}"/><br/>
+                            <a href="#{r.URL}" target="_blank">
+                                <h:outputText style="font-size: 8pt" value="#{r.URL}"/>
+                            </a>                            
+                            <br/><h:outputText style="font-size: 8pt" value="Base Score: #{r.baseScore}"/>
+                            <br/><h:outputText style="font-size: 8pt" value="Tone Score: #{r.toneScore}"/>
+                            <br/><h:outputText style="font-size: 8pt" value="Final Score: #{r.finalScore}"/>
+                            <ui:repeat value="#{r.toneScores}" var="t">
+                                <br/><br/><h:outputText style="font-size: 8pt" value="#{t.tone}: #{t.score}% - #{t.keywords}"/>
+                            </ui:repeat>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:form>
+            <br/>
+        </ui:define>
+    </ui:composition>
+</html>
