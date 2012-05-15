@@ -7,8 +7,9 @@ package jpa.entities;
 import java.io.Serializable;
 
 /**
- *
- * @author Diego
+ * A POJO that stores a document's tone score with respect to a specific
+ * tone, as well as the keywords that influenced the result
+ * @author Diego Perez Botero
  */
 public class ToneScore implements Serializable {
     

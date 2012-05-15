@@ -25,8 +25,8 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
 /**
- *
- * @author Diego
+ * EJB that handles user queries
+ * @author Diego Perez Botero
  */
 @Stateless
 @LocalBean
@@ -35,6 +35,7 @@ public class SearchActions {
     private static StandardAnalyzer analyzer;
     private static Directory index;
     
+    // Sets up the Lucene index reader and the query analyzer
     public SearchActions ()
     {
         try {
@@ -45,6 +46,7 @@ public class SearchActions {
         }
     }
 
+    // Returns search results for a given query, prioritizing a specific list of tones
     public List<SearchResult> findResults (String query, List<String> tones)
     {
         List<SearchResult> results = new ArrayList<SearchResult>();
@@ -58,13 +60,15 @@ public class SearchActions {
             .parse(query);
             // int hitsPerPage = 10;
 
+            // Ask for all the documents with their default query-dependent Lucene scores
             IndexSearcher searcher = new IndexSearcher(index, true);
             TopScoreDocCollector collector = TopScoreDocCollector.create(searcher.maxDoc()+1, true);
             searcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             SearchResult[] partialResults = new SearchResult[hits.length];
-            // Display the results
+            
             // System.out.println("\nFound " + hits.length + " hits.");
+            // Process the results and calculate their new tone-aware scores
             for (int i = 0; i < hits.length; ++i) {
                 int docId = hits[i].doc;
                 float baseScore = hits[i].score;
@@ -76,6 +80,7 @@ public class SearchActions {
                 page.setURL(d.get("path"));
                 page.setBaseScore(baseScore);
                 
+                // Grab all relevant tone scores
                 List<ToneScore> toneScores = new ArrayList<ToneScore>();
                 for (String tone : tones)
                 {
@@ -89,10 +94,12 @@ public class SearchActions {
                 }
                 page.setToneScores(toneScores);
                 
+                // Calculate the document's total tone score
                 float toneScore = 0;
                 for (ToneScore s : toneScores)
                    toneScore += s.getScore() / 100.0f;
                 
+                // Calculate the document's average tone score
                 if (toneScores.size() > 0
                         && d.get("contents").split("\\s+").length > 200)
                     toneScore /= toneScores.size();
@@ -101,6 +108,7 @@ public class SearchActions {
                 else                    
                     toneScore = 1;
                 
+                // Calculate the final tone-aware score
                 page.setToneScore(toneScore);
                 page.setFinalScore(toneScore*baseScore);
                 
@@ -108,6 +116,7 @@ public class SearchActions {
                 //System.out.println("\t" + d.get("positive"));
             }
             
+            // Sort the results by their tone-aware score
             Arrays.sort(partialResults, new Comparator<SearchResult>()
             {
 
@@ -126,6 +135,7 @@ public class SearchActions {
                 
             });
             
+            // Grab the top 30 results (to be returned to the user)
             for (int i = 0; i < 30; i++)
             {
                 results.add(partialResults[i]);

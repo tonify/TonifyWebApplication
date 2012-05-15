@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
- * @author Diego
+ * A POJO that stores a single search result
+ * @author Diego Perez Botero
  */
 public class SearchResult implements Serializable {
     

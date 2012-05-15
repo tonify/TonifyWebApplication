@@ -15,8 +15,9 @@ import javax.faces.bean.SessionScoped;
 import jpa.entities.SearchResult;
 
 /**
- *
- * @author Diego
+ * ManagedBean that exposes the search engine's user options and invokes
+ * the appropriate EJBs when a query is submitted
+ * @author Diego Perez Botero
  */
 @ManagedBean
 @SessionScoped
